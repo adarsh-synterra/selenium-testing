@@ -25,8 +25,12 @@ export default function LoginPage() {
         setError(data.error ?? "Login failed");
         return;
       }
-      router.refresh();
-      router.push("/products");
+      // Use a full-page navigation so the root layout re-renders with the
+      // freshly set auth cookie in scope. A client-side router.push() leaves
+      // the persistent layout stale until the next refresh, which races with
+      // the navigation. window.location is bulletproof for auth transitions.
+      window.location.assign("/products");
+      return;
     } catch {
       setError("Network error");
     } finally {

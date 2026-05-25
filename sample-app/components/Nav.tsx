@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import type { PublicUser } from "@/lib/types";
 
 export default function Nav({
@@ -11,14 +8,6 @@ export default function Nav({
   user: PublicUser | null;
   cartCount: number;
 }) {
-  const router = useRouter();
-
-  async function handleLogout() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.refresh();
-    router.push("/");
-  }
-
   return (
     <nav
       data-testid="nav"
@@ -57,13 +46,15 @@ export default function Nav({
               <span data-testid="nav-user-name" className="text-slate-600">
                 {user.name}
               </span>
-              <button
-                onClick={handleLogout}
-                data-testid="nav-logout"
-                className="rounded border border-slate-300 px-3 py-1 hover:bg-slate-100"
-              >
-                Log out
-              </button>
+              <form action="/api/auth/logout" method="POST" className="inline">
+                <button
+                  type="submit"
+                  data-testid="nav-logout"
+                  className="rounded border border-slate-300 px-3 py-1 hover:bg-slate-100"
+                >
+                  Log out
+                </button>
+              </form>
             </>
           ) : (
             <Link
